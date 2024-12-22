@@ -9,6 +9,9 @@ use std::{
 	ops::{Bound, Index, RangeBounds},
 };
 
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
+
 mod entry;
 mod ext;
 
@@ -152,10 +155,11 @@ pub const M: usize = 8;
 /// to any other key, as determined by the [`Ord`] trait, changes while it is in the map.
 /// This is normally only possible through [`Cell`](`std::cell::Cell`),
 /// [`RefCell`](`std::cell::RefCell`), global state, I/O, or unsafe code.
-#[derive(Clone)]
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct BTreeMap<K, V, C> {
 	/// Allocated and free nodes.
-	nodes: C,
+	pub nodes: C,
 
 	/// Root node id.
 	root: Option<usize>,

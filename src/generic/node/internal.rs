@@ -8,6 +8,9 @@ use crate::{
 use smallvec::SmallVec;
 use std::{borrow::Borrow, cmp::Ordering};
 
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
+
 /// Underflow threshold.
 ///
 /// An internal node is underflowing if it has less items than this constant.
@@ -16,7 +19,8 @@ const UNDERFLOW: usize = M / 2 - 1;
 /// Internal node branch.
 ///
 /// A branch is an item followed by child node identifier.
-#[derive(Clone)]
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Branch<K, V> {
 	/// Item.
 	pub item: Item<K, V>,
@@ -70,7 +74,8 @@ pub struct InsertionError<K, V> {
 /// Internal node.
 ///
 /// An internal node is a node where each item is surrounded by edges to child nodes.
-#[derive(Clone)]
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub struct Internal<K, V> {
 	parent: usize,
 	first_child: usize,

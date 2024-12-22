@@ -7,14 +7,14 @@ use btree_slab::{
 };
 use rand::{rngs::SmallRng, seq::SliceRandom, SeedableRng};
 
-const SEED: &'static [u8; 32] = b"testseedtestseedtestseedtestseed";
+const SEED: &[u8; 32] = b"testseedtestseedtestseedtestseed";
 
 #[test]
 pub fn insert() {
 	let mut btree: BTreeMap<usize, usize> = BTreeMap::new();
 
 	for (key, value) in &ITEMS {
-		if let Some(_) = btree.insert(*key, *value) {
+		if btree.insert(*key, *value).is_some() {
 			println!("duplicate: {}", key);
 		}
 		btree.validate();
@@ -37,7 +37,7 @@ pub fn remove() {
 	items.shuffle(&mut rng);
 
 	for (key, _) in &items {
-		btree.remove(&key);
+		btree.remove(key);
 		btree.validate();
 	}
 
@@ -55,23 +55,17 @@ pub fn item_addresses() {
 	for (key, _) in &ITEMS {
 		let addr = btree.address_of(key).ok().unwrap();
 
-		match btree.previous_item_address(addr) {
-			Some(before_addr) => {
-				assert!(before_addr != addr);
-				let addr_again = btree.next_item_address(before_addr).unwrap();
-				assert_eq!(addr_again, addr)
-			}
-			None => (),
-		}
+		if let Some(before_addr) = btree.previous_item_address(addr) {
+  				assert!(before_addr != addr);
+  				let addr_again = btree.next_item_address(before_addr).unwrap();
+  				assert_eq!(addr_again, addr)
+  			}
 
-		match btree.next_item_address(addr) {
-			Some(after_addr) => {
-				assert!(after_addr != addr);
-				let addr_again = btree.previous_item_address(after_addr).unwrap();
-				assert_eq!(addr_again, addr)
-			}
-			None => (),
-		}
+		if let Some(after_addr) = btree.next_item_address(addr) {
+  				assert!(after_addr != addr);
+  				let addr_again = btree.previous_item_address(after_addr).unwrap();
+  				assert_eq!(addr_again, addr)
+  			}
 	}
 }
 

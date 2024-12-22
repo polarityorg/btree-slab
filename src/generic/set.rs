@@ -8,6 +8,9 @@ use std::{
 	ops::RangeBounds,
 };
 
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
+
 /// A set based on a B-Tree.
 ///
 /// See [`BTreeMap`]'s documentation for a detailed discussion of this collection's performance benefits and drawbacks.
@@ -19,6 +22,8 @@ use std::{
 /// [`Ord`]: core::cmp::Ord
 /// [`Cell`]: core::cell::Cell
 /// [`RefCell`]: core::cell::RefCell
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct BTreeSet<T, C> {
 	map: BTreeMap<T, (), C>,
 }
