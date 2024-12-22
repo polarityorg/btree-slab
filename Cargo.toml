@@ -12,15 +12,15 @@ license = "MIT/Apache-2.0"
 readme = "README.md"
 
 [features]
-default = ["std-slab"]
+default = ["std-slab", "serde"]
 dot = []
 std-slab = ["slab", "cc-traits/slab"]
-serde = ["dep:serde", "smallvec/serde", "serde/derive"]
+serde = ["dep:serde", "smallvec/serde", "serde/derive", "slab/serde"]
 
 [dependencies]
 smallvec = "1.8.0"
 cc-traits = "2.0"
-slab = { version = "0.4.5", optional = true }
+slab = { version = "0.4.9", optional = true }
 serde = { version = "1.0.216", optional = true }
 
 [dev-dependencies]
