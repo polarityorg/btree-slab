@@ -15,11 +15,13 @@ readme = "README.md"
 default = ["std-slab"]
 dot = []
 std-slab = ["slab", "cc-traits/slab"]
+serde = ["dep:serde", "smallvec/serde", "serde/derive"]
 
 [dependencies]
 smallvec = "1.8.0"
 cc-traits = "2.0"
 slab = { version = "0.4.5", optional = true }
+serde = { version = "1.0.216", optional = true }
 
 [dev-dependencies]
 rand = { version = "0.8.5", features = ["small_rng"] }
